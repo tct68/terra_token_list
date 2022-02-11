@@ -41,6 +41,7 @@ async function main(network) {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
 
+  const _whitelists = [];
   whitelists.forEach(async (v) => {
     const _token = v;
     if (!_token.name) {
@@ -51,9 +52,11 @@ async function main(network) {
         AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
       );
       if (info && info.init_msg) {
-        v.name = info.init_msg.name;
+        _token.name = info.init_msg.name;
       }
     }
+
+    _whitelists.push(_token);
   });
   writeFileSync(filePath, JSON.stringify(whitelists));
 
