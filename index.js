@@ -58,7 +58,7 @@ async function main(network) {
 
     _whitelists.push(_token);
   });
-  writeFileSync(filePath, JSON.stringify(whitelists));
+  writeFileSync(filePath, JSON.stringify(_whitelists));
 
   return true;
 }
