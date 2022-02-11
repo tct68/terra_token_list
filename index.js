@@ -10,6 +10,8 @@ const blacklist = [
   "terra1qhkjjlqq2lyf2evzserdaqx55nugksjqdpxvru",
   "terra1374w7fkm7tqhd9dt2r5shjk8ly2kum443uennt",
   "terra1jr9s6cx4j637fctkvglrclvrr824vu3r2rrvj7",
+  "terra18py95akdje8q8aaukhx65dplh9342m0j884wt4",
+  "terra1090l5p5v794dpyzr07da72cyexhuc4zag5cuer",
 ];
 
 async function main(network) {
@@ -44,9 +46,6 @@ async function main(network) {
   for (let index = 0; index < whitelists.length; index++) {
     const element = whitelists[index];
     if (!element.name) {
-      if (element.key == "terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x") {
-        debugger;
-      }
       const info = await terra.wasm.contractInfo(
         AccAddress.fromValAddress(element.key ?? element.contract_addr)
       );
