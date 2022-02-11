@@ -37,8 +37,20 @@ async function main(network) {
   }
 
   writeFileSync(filePath, "");
-  const whitelists = mergedTokens.filter(async (v, i, ara) => {
+  const whitelists = mergedTokens.filter((v, i, ara) => {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
+  });
+
+  whitelists.forEach(async (v) => {
+    const _token = v;
+    if (!_token.name) {
+      const info = await terra.wasm.contractInfo(
+        AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
+      );
+      if (info && info.init_msg) {
+        v.name = info.init_msg.name;
+      }
+    }
   });
   writeFileSync(filePath, JSON.stringify(whitelists));
 
