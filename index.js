@@ -27,7 +27,8 @@ async function main() {
   writeFileSync(filePath, "");
   const whitelists = mergedTokens.filter((v) => {
     if (!v.name) {
-      console.log(v.symbol);
+      console.log(v);
+      //v.name = contracts[v.contract_addr].name;
     }
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
