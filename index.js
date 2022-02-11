@@ -2,6 +2,7 @@ const axios = require("axios");
 const { writeFileSync, existsSync, mkdirSync } = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
+const { LCDClient, AccAddress } = require("@terra-money/terra.js");
 
 const blacklist = [
   "terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h",
@@ -11,13 +12,25 @@ const blacklist = [
   "terra1jr9s6cx4j637fctkvglrclvrr824vu3r2rrvj7",
 ];
 
-async function main() {
-  const contracts = await getContractList();
-  const terraAssetList = await getTerraAsset();
+async function main(network) {
+  var terra = new LCDClient({
+    URL: "https://lcd.terra.dev",
+    chainID: "bombay-5",
+  });
+
+  if (network == "testnet") {
+    terra = new LCDClient({
+      URL: "https://bombay-lcd.terra.dev",
+      chainID: "bombay-12",
+    });
+  }
+
+  const contracts = await getContractList(network);
+  const terraAssetList = await getTerraAsset(network);
   const terraswapAssetList = await getTerraswapAsset();
   const mergedTokens = terraAssetList.concat(terraswapAssetList);
 
-  const fileName = "token.json";
+  const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
   const filePath = path.join(outdir, fileName);
   if (!existsSync(outdir)) {
@@ -25,10 +38,15 @@ async function main() {
   }
 
   writeFileSync(filePath, "");
-  const whitelists = mergedTokens.filter((v) => {
-    if (!v.name) {
-      console.log(v);
-      //v.name = contracts[v.contract_addr].name;
+  const whitelists = mergedTokens.filter(async (v, i, ara) => {
+    const _token = v;
+    if (!_token.name) {
+      const info = await terra.wasm.contractInfo(
+        AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
+      );
+      if (info && info.init_msg) {
+        _token.name = info.init_msg.name;
+      }
     }
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
@@ -37,16 +55,12 @@ async function main() {
   return true;
 }
 
-async function getTerraAsset() {
+async function getTerraAsset(network) {
   const terraAssetListUrl = "https://assets.terra.money/cw20/tokens.json";
   const terraAssetList = await axios.default.get(terraAssetListUrl);
-  const testnetTokens = terraAssetList.data["testnet"];
-  const mainnetToken = terraAssetList.data["mainnet"];
-
-  const testnets = getTokenList(testnetTokens, "testnet");
-  const mainnet = getTokenList(mainnetToken, "mainnet");
-  const terraAssetListFlat = testnets.concat(mainnet);
-  return terraAssetListFlat;
+  const tokens = terraAssetList.data[network];
+  const list = getTokenList(tokens);
+  return list;
 }
 
 async function getTerraswapAsset() {
@@ -55,21 +69,25 @@ async function getTerraswapAsset() {
   return assetsJson;
 }
 
-function getTokenList(tokens, network) {
+function getTokenList(tokens) {
   const keys = Object.keys(tokens);
   const tokenList = [];
   keys.forEach((element) => {
-    tokenList.push({ ...tokens[element], isTestnet: network == "testnet" });
+    tokenList.push({
+      ...tokens[element],
+      key: element,
+    });
   });
   return tokenList;
 }
-async function getContractList() {
+async function getContractList(network) {
   const contractsUrl = "https://assets.terra.money/cw20/contracts.json";
   const data = (await axios.default.get(contractsUrl)).data;
-  return data;
+  const tokens = getTokenList(data[network]);
+  return tokens;
 }
 
-main().then((c) => {
+main("mainnet").then((c) => {
   if (c) {
     console.log("Add file");
     exec("git add .", (err, stdout, stderr) => {

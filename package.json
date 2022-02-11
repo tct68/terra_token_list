@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@terra-money/terra.js": "^3.0.7",
     "axios": "^0.25.0"
   }
 }
