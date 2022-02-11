@@ -12,6 +12,7 @@ const blacklist = [
 ];
 
 async function main() {
+  const contracts = await getContractList();
   const terraAssetList = await getTerraAsset();
   const terraswapAssetList = await getTerraswapAsset();
   const mergedTokens = terraAssetList.concat(terraswapAssetList);
@@ -25,6 +26,7 @@ async function main() {
 
   writeFileSync(filePath, "");
   const whitelists = mergedTokens.filter((v) => {
+    console.log(v);
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
   writeFileSync(filePath, JSON.stringify(whitelists));
@@ -57,6 +59,11 @@ function getTokenList(tokens, network) {
     tokenList.push({ ...tokens[element], isTestnet: network == "testnet" });
   });
   return tokenList;
+}
+async function getContractList() {
+  const contractsUrl = "https://assets.terra.money/cw20/contracts.json";
+  const data = (await axios.default.get(contractsUrl)).data;
+  return data;
 }
 
 main().then((c) => {
