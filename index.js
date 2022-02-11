@@ -41,24 +41,22 @@ async function main(network) {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
 
-  const _whitelists = [];
-  whitelists.forEach(async (v) => {
-    const _token = v;
-    if (!_token.name) {
-      if (_token.key == "terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x") {
+  for (let index = 0; index < whitelists.length; index++) {
+    const element = whitelists[index];
+    if (!element.name) {
+      if (element.key == "terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x") {
         debugger;
       }
       const info = await terra.wasm.contractInfo(
-        AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
+        AccAddress.fromValAddress(element.key ?? element.contract_addr)
       );
       if (info && info.init_msg) {
-        _token.name = info.init_msg.name;
+        element.name = info.init_msg.name;
       }
     }
+  }
 
-    _whitelists.push(_token);
-  });
-  writeFileSync(filePath, JSON.stringify(_whitelists));
+  writeFileSync(filePath, JSON.stringify(whitelists));
 
   return true;
 }
