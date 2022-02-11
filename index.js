@@ -32,7 +32,6 @@ async function main(network) {
   }
 
   writeFileSync(filePath, "");
-  console.log(blacklist);
   const whitelists = mergedTokens.filter((v) => {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
