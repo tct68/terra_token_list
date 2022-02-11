@@ -1,7 +1,10 @@
 const axios = require("axios");
 const { writeFileSync, existsSync, mkdirSync } = require("fs");
 const path = require("path");
-const blacklist = ["terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h"];
+const blacklist = [
+  "terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h",
+  "terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6",
+];
 
 async function main() {
   const terraAssetList = await getTerraAsset();
