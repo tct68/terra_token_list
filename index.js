@@ -8,6 +8,7 @@ const blacklist = [
   "terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6",
   "terra1qhkjjlqq2lyf2evzserdaqx55nugksjqdpxvru",
   "terra1374w7fkm7tqhd9dt2r5shjk8ly2kum443uennt",
+  "terra1jr9s6cx4j637fctkvglrclvrr824vu3r2rrvj7",
 ];
 
 async function main() {
