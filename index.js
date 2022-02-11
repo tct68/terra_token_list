@@ -5,13 +5,7 @@ const path = require("path");
 async function main() {
   const terraAssetList = await getTerraAsset();
   const terraswapAssetList = await getTerraswapAsset();
-  const mergedTokens = [];
-  terraswapAssetList.forEach((x) => {
-    const asset = terraAssetList.find((c) => c.token == x.contract_addr);
-    if (asset) {
-      mergedTokens.push({ ...x, ...asset });
-    }
-  });
+  const mergedTokens = terraAssetList.concat(terraswapAssetList);
 
   const fileName = "token.json";
   const outdir = path.join(__dirname, "output");
@@ -20,6 +14,7 @@ async function main() {
     mkdirSync(outdir);
   }
 
+  writeFileSync(filePath, "");
   writeFileSync(filePath, JSON.stringify(mergedTokens));
 }
 
