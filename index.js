@@ -44,6 +44,9 @@ async function main(network) {
   whitelists.forEach(async (v) => {
     const _token = v;
     if (!_token.name) {
+      if (_token.key == "terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x") {
+        debugger;
+      }
       const info = await terra.wasm.contractInfo(
         AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
       );
