@@ -45,9 +45,10 @@ async function main(network) {
         AccAddress.fromValAddress(_token.key ?? _token.contract_addr)
       );
       if (info && info.init_msg) {
-        _token.name = info.init_msg.name;
+        v.name = info.init_msg.name;
       }
     }
+
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
   writeFileSync(filePath, JSON.stringify(whitelists));
