@@ -88,7 +88,7 @@ async function getContractList(network) {
   return tokens;
 }
 
-main("mainnet").then((c) => {
+main("testnet").then((c) => {
   if (c) {
     console.log("Add file");
     exec("git add .", (err, stdout, stderr) => {
