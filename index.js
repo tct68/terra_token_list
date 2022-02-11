@@ -12,6 +12,8 @@ const blacklist = [
   "terra1jr9s6cx4j637fctkvglrclvrr824vu3r2rrvj7",
   "terra18py95akdje8q8aaukhx65dplh9342m0j884wt4",
   "terra1090l5p5v794dpyzr07da72cyexhuc4zag5cuer",
+  "terra14vmf4tzg23fxnt9q5wavlp4wtvzzap82hdq402",
+  "terra1hvmzhnhxnyhjfnctntnn49a35w6hvygmxvjt7q",
 ];
 
 async function main(network) {
@@ -27,7 +29,6 @@ async function main(network) {
     });
   }
 
-  const contracts = await getContractList(network);
   const terraAssetList = await getTerraAsset(network);
   const mergedTokens = terraAssetList;
 
@@ -39,7 +40,7 @@ async function main(network) {
   }
 
   writeFileSync(filePath, "");
-  const whitelists = mergedTokens.filter((v, i, ara) => {
+  const whitelists = mergedTokens.filter((v) => {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
 
@@ -68,12 +69,6 @@ async function getTerraAsset(network) {
   return list;
 }
 
-async function getTerraswapAsset() {
-  const terraswapAssetListUrl = "https://api.terraswap.io/tokens";
-  const assetsJson = (await axios.default.get(terraswapAssetListUrl)).data;
-  return assetsJson;
-}
-
 function getTokenList(tokens) {
   const keys = Object.keys(tokens);
   const tokenList = [];
@@ -85,21 +80,15 @@ function getTokenList(tokens) {
   });
   return tokenList;
 }
-async function getContractList(network) {
-  const contractsUrl = "https://assets.terra.money/cw20/contracts.json";
-  const data = (await axios.default.get(contractsUrl)).data;
-  const tokens = getTokenList(data[network]);
-  return tokens;
-}
 
 main("testnet").then((c) => {
   if (c) {
     console.log("Add file");
-    exec("git add .", (err, stdout, stderr) => {
+    exec("git add .", () => {
       console.log("Commit");
-      exec('git commit -m "Commit token list"', (err, stdout, stderr) => {
+      exec('git commit -m "Commit token list"', () => {
         console.log("push");
-        exec("git push origin main", (err, stdout, stderr) => {
+        exec("git push origin main", () => {
           console.log("done");
         });
       });
