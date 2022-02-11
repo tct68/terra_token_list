@@ -76,7 +76,7 @@ function getTokenList(tokens) {
   return tokenList;
 }
 
-main("mainnet").then((c) => {
+main("testnet").then((c) => {
   if (c) {
     console.log("Add file");
     exec("git add .", () => {
