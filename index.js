@@ -5,8 +5,12 @@ const { exec } = require("child_process");
 const { LCDClient, AccAddress } = require("@terra-money/terra.js");
 
 const blacklist = readFileSync(
-  path.join(__dirname, "output", "delisted-token.json")
-).toJSON().data;
+  path.join(__dirname, "output", "delisted-token.json"),
+  {
+    encoding: "utf8",
+    flag: "r",
+  }
+);
 
 async function main(network) {
   var terra = new LCDClient({
