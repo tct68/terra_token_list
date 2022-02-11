@@ -27,8 +27,7 @@ async function main(network) {
 
   const contracts = await getContractList(network);
   const terraAssetList = await getTerraAsset(network);
-  const terraswapAssetList = await getTerraswapAsset();
-  const mergedTokens = terraAssetList.concat(terraswapAssetList);
+  const mergedTokens = terraAssetList;
 
   const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
