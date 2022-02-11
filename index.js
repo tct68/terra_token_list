@@ -1,6 +1,8 @@
 const axios = require("axios");
 const { writeFileSync, existsSync, mkdirSync } = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
+
 const blacklist = [
   "terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h",
   "terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6",
@@ -24,8 +26,9 @@ async function main() {
   const whitelists = mergedTokens.filter((v) => {
     return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
   });
-  console.log(whitelists.length);
   writeFileSync(filePath, JSON.stringify(whitelists));
+
+  return true;
 }
 
 async function getTerraAsset() {
@@ -55,4 +58,17 @@ function getTokenList(tokens, network) {
   return tokenList;
 }
 
-main();
+main().then((c) => {
+  if (c) {
+    console.log("Add file");
+    exec("git add .", (err, stdout, stderr) => {
+      console.log("Commit");
+      exec('git commit -m "Commit token list"', (err, stdout, stderr) => {
+        console.log("push");
+        exec("git push origin main", (err, stdout, stderr) => {
+          console.log("done");
+        });
+      });
+    });
+  }
+});
