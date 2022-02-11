@@ -1,6 +1,7 @@
 const axios = require("axios");
 const { writeFileSync, existsSync, mkdirSync } = require("fs");
 const path = require("path");
+const blacklist = ["terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h"];
 
 async function main() {
   const terraAssetList = await getTerraAsset();
@@ -15,7 +16,11 @@ async function main() {
   }
 
   writeFileSync(filePath, "");
-  writeFileSync(filePath, JSON.stringify(mergedTokens));
+  const whitelists = mergedTokens.filter((v) => {
+    return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
+  });
+  console.log(whitelists.length);
+  writeFileSync(filePath, JSON.stringify(whitelists));
 }
 
 async function getTerraAsset() {
