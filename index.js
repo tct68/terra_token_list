@@ -44,7 +44,8 @@ async function main(network) {
       !blacklist.includes(v.token) &&
       !blacklist.includes(v.contract_addr) &&
       v.name != "TEST DONOT BUY" &&
-      v.name != "Token test dont buy"
+      v.name != "Token test dont buy" &&
+      v.name != "test dont buy"
     );
   });
 
