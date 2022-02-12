@@ -97,7 +97,7 @@ async function getActiveDenoms(terra) {
     const path = isDenomTerra(denom) ? `Terra/${symbol}.svg` : `${symbol}.svg`;
     const icon = `https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/${path}`;
     activeDenomsInfos.push({
-      name: denom,
+      name: (denom ?? "").toUpperCase(),
       symbol,
       icon,
       token: denom,
