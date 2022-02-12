@@ -91,13 +91,17 @@ function getTokenList(tokens) {
 async function getActiveDenoms(terra) {
   const activeDenoms = await terra.oracle.activeDenoms();
   const activeDenomsInfos = [];
-  console.log(terra.config.chainID);
+
   for (let index = 0; index < activeDenoms.length; index++) {
     const denom = activeDenoms[index];
     const symbol = readDenom(denom);
     const path = isDenomTerra(denom) ? `Terra/${symbol}.svg` : `${symbol}.svg`;
     const icon = `https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/${path}`;
-
+    const address =
+      terra.config.chainID == "bombay-12"
+        ? "".substring(1, denom.length - 1)
+        : denom;
+    console.log(address);
     activeDenomsInfos.push({
       name: (denom ?? "").toUpperCase(),
       symbol,
