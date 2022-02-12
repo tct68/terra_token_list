@@ -27,7 +27,9 @@ async function main(network) {
 
   const terraAssetList = await getTerraAsset(network);
   const denoms = await getActiveDenoms(terra);
-  const mergedTokens = terraAssetList.concat(denoms);
+  const mergedTokens = terraAssetList
+    .concat(denoms)
+    .sort((x, y) => x.symbol - y.symbol);
 
   const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
