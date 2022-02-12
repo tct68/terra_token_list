@@ -3,6 +3,7 @@ const { writeFileSync, existsSync, mkdirSync, readFileSync } = require("fs");
 const path = require("path");
 
 const main = async () => {
+  console.log("--------------Get networks config--------------");
   const URL = "https://assets.terra.money/chains.json";
   const data = (await axios.get(URL)).data;
 
