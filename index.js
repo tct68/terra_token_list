@@ -3,7 +3,7 @@ const { writeFileSync, existsSync, mkdirSync, readFileSync } = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 const { LCDClient, AccAddress } = require("@terra-money/terra.js");
-const { toAmount, readDenom, isDenomTerra } = require("@terra.kitchen/utils");
+const { readDenom, isDenomTerra } = require("@terra.kitchen/utils");
 
 const blacklist = JSON.parse(
   readFileSync(path.join(__dirname, "output", "delisted-token.json"), {
@@ -32,6 +32,9 @@ async function main(network) {
   const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
   const filePath = path.join(outdir, fileName);
+
+  console.log(denoms);
+
   if (!existsSync(outdir)) {
     mkdirSync(outdir);
   }
@@ -97,11 +100,7 @@ async function getActiveDenoms(terra) {
     const symbol = readDenom(denom);
     const path = isDenomTerra(denom) ? `Terra/${symbol}.svg` : `${symbol}.svg`;
     const icon = `https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/${path}`;
-    const address =
-      terra.config.chainID == "bombay-12"
-        ? "".substring(1, denom.length - 1)
-        : denom;
-    console.log(address);
+
     activeDenomsInfos.push({
       name: (denom ?? "").toUpperCase(),
       symbol,
@@ -114,7 +113,7 @@ async function getActiveDenoms(terra) {
   return activeDenomsInfos;
 }
 
-main("testnet").then((c) => {
+main("mainnet").then((c) => {
   if (c) {
     console.log("Add file");
     exec("git add .", () => {
