@@ -28,7 +28,7 @@ async function main(network) {
 
   const terraAssetList = await getTerraAsset(network);
   const denoms = await getActiveDenoms(terra);
-  const mergedTokens = terraAssetList.concat(denoms).sort(compare);
+  const mergedTokens = terraAssetList.concat(denoms).sort(compareVerified);
 
   const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
@@ -73,6 +73,16 @@ function compare(a, b) {
     return -1;
   }
   if (a.symbol > b.symbol) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareVerified(a, b) {
+  if (a.verified < b.verified) {
+    return -1;
+  }
+  if (a.verified > b.verified) {
     return 1;
   }
   return 0;
