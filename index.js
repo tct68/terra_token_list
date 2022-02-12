@@ -33,8 +33,6 @@ async function main(network) {
   const outdir = path.join(__dirname, "output");
   const filePath = path.join(outdir, fileName);
 
-  console.log(denoms);
-
   if (!existsSync(outdir)) {
     mkdirSync(outdir);
   }
@@ -57,7 +55,7 @@ async function main(network) {
   }
 
   writeFileSync(filePath, JSON.stringify(whitelists));
-
+  await require("./config");
   return true;
 }
 
