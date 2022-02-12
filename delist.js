@@ -2,6 +2,7 @@ const { writeFileSync, existsSync, mkdirSync } = require("fs");
 const { default: axios } = require("axios");
 const path = require("path");
 const main = async () => {
+  console.log("--------------Get Delist --------------");
   const blacklist = [
     "terra1a7zxk56c72elupp7p44hn4k94fsvavnhylhr6h",
     "terra1qs7h830ud0a4hj72yr8f7jmlppyx7z524f7gw6",

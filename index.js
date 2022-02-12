@@ -13,6 +13,7 @@ const blacklist = JSON.parse(
 );
 
 async function main(network) {
+  console.log("-------------- Get token list --------------");
   var terra = new LCDClient({
     URL: "https://lcd.terra.dev",
     chainID: "bombay-5",
