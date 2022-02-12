@@ -15,7 +15,16 @@ const main = async () => {
     mkdirSync(outdir);
   }
   delete data["localterra"];
-  writeFileSync(filePath, JSON.stringify(data));
+
+  const configs = [];
+
+  const configKeys = Object.keys(data);
+  configKeys.forEach((element) => {
+    configs.push(data[element]);
+  });
+
+  writeFileSync(filePath, JSON.stringify(configs));
+  return configs;
 };
 
 module.exports = main();
