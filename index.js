@@ -71,11 +71,11 @@ function compare(a, b) {
 }
 
 async function getTerraAsset(network) {
-  const terraAssetListUrl = "https://assets.terra.money/cw20/tokens.json";
+  const terraAssetListUrl = "https://api.terraswap.io/tokens";
   const terraAssetList = await axios.default.get(terraAssetListUrl);
-  const tokens = terraAssetList.data[network];
-  const list = getTokenList(tokens);
-  return list;
+  const tokens = terraAssetList.data;
+  console.log(tokens);
+  return tokens;
 }
 
 function getTokenList(tokens) {
