@@ -40,7 +40,11 @@ async function main(network) {
 
   writeFileSync(filePath, "");
   const whitelists = mergedTokens.filter((v) => {
-    return !blacklist.includes(v.token) && !blacklist.includes(v.contract_addr);
+    return (
+      !blacklist.includes(v.token) &&
+      !blacklist.includes(v.contract_addr) &&
+      v.name != "TEST DONOT BUY"
+    );
   });
 
   for (let index = 0; index < whitelists.length; index++) {
