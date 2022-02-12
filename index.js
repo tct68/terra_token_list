@@ -3,6 +3,7 @@ const { writeFileSync, existsSync, mkdirSync, readFileSync } = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 const { LCDClient, AccAddress } = require("@terra-money/terra.js");
+const { toAmount, readDenom, isDenomTerra } = require("@terra.kitchen/utils");
 
 const blacklist = JSON.parse(
   readFileSync(path.join(__dirname, "output", "delisted-token.json"), {
@@ -25,7 +26,8 @@ async function main(network) {
   }
 
   const terraAssetList = await getTerraAsset(network);
-  const mergedTokens = terraAssetList;
+  const denoms = await getActiveDenoms(terra);
+  const mergedTokens = terraAssetList.concat(denoms);
 
   const fileName = `${network}-token.json`;
   const outdir = path.join(__dirname, "output");
@@ -74,6 +76,26 @@ function getTokenList(tokens) {
     });
   });
   return tokenList;
+}
+
+async function getActiveDenoms(terra) {
+  const activeDenoms = await terra.oracle.activeDenoms();
+  const activeDenomsInfos = [];
+  for (let index = 0; index < activeDenoms.length; index++) {
+    const denom = activeDenoms[index];
+    const symbol = readDenom(denom);
+    const path = isDenomTerra(denom) ? `Terra/${symbol}.svg` : `${symbol}.svg`;
+    const icon = `https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/${path}`;
+    activeDenomsInfos.push({
+      name: denom,
+      symbol,
+      icon,
+      token: denom,
+      key: denom,
+    });
+  }
+
+  return activeDenomsInfos;
 }
 
 main("testnet").then((c) => {
