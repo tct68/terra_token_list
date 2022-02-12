@@ -19,12 +19,12 @@ async function main(network) {
     chainID: "bombay-5",
   });
 
-  if (network == "testnet") {
-    terra = new LCDClient({
-      URL: "https://bombay-lcd.terra.dev",
-      chainID: "bombay-12",
-    });
-  }
+  // if (network == "testnet") {
+  //   terra = new LCDClient({
+  //     URL: "https://bombay-lcd.terra.dev",
+  //     chainID: "bombay-12",
+  //   });
+  // }
 
   const terraAssetList = await getTerraAsset(network);
   const denoms = await getActiveDenoms(terra);
@@ -74,7 +74,7 @@ async function getTerraAsset(network) {
   const terraAssetListUrl = "https://api.terraswap.io/tokens";
   const terraAssetList = await axios.default.get(terraAssetListUrl);
   const tokens = terraAssetList.data;
-  console.log(tokens);
+  console.log(tokens.length);
   return tokens;
 }
 
@@ -112,7 +112,8 @@ async function getActiveDenoms(terra) {
   return activeDenomsInfos;
 }
 
-main("mainnet").then((c) => {
+main("testnet").then((c) => {
+  // return;
   if (c) {
     console.log("Add file");
     exec("git add .", () => {
