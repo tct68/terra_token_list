@@ -43,9 +43,12 @@ async function main(network) {
     return (
       !blacklist.includes(v.token) &&
       !blacklist.includes(v.contract_addr) &&
-      v.name != "TEST DONOT BUY"
+      v.name != "TEST DONOT BUY" &&
+      v.name != "Token test dont buy"
     );
   });
+
+  console.log(whitelists.length);
 
   for (let index = 0; index < whitelists.length; index++) {
     const element = whitelists[index];
