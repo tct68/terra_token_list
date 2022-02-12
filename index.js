@@ -68,10 +68,10 @@ function main() {
 }
 
 function compareVerified(a, b) {
-  if (a.verified < b.verified) {
+  if (a.symbol < b.symbol) {
     return -1;
   }
-  if (a.verified > b.verified) {
+  if (a.symbol > b.symbol) {
     return 1;
   }
   return 0;
